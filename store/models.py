@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MinValueValidator
+
 # Create your models here.
 
 class Promotion(models.Model):
@@ -23,9 +25,10 @@ class Collection(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
+    Qty = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    inventory = models.IntegerField()
+    price = models.DecimalField(max_digits=6, decimal_places=2, validators = [MinValueValidator(1)])
+    inventory = models.IntegerField( validators = [MinValueValidator(1)])
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion, blank=True)
